@@ -15,11 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+syntax = "proto2";
+
 
 option java_package = "org.apache.hadoop.hdfs.server.namenode";
 option java_outer_classname = "FsImageProto";
 
-option go_package = "hdfs-fsimage-parse-go/hadoop_protocols/src/hadoop_hdfs_fsimage";
+option go_package = "fsanalyze/protofiles/src/hadoop_hdfs_fsimage";
 
 package hadoop.hdfs.fsimage;
 

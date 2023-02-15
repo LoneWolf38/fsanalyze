@@ -25,12 +25,13 @@
 // This file contains protocol buffers that are used throughout HDFS -- i.e.
 // by the client, server, and data transfer protocols.
 
+syntax = "proto2";
 
 option java_package = "org.apache.hadoop.hdfs.protocol.proto";
 option java_outer_classname = "HdfsProtos";
 option java_generate_equals_and_hash = true;
 
-option go_package = "hdfs-fsimage-parse-go/hadoop_protocols/src/hadoop_hdfs";
+option go_package = "fsanalyze/protofiles/src/hadoop_hdfs";
 
 package hadoop.hdfs;
 
