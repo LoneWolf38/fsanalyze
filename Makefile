@@ -12,3 +12,11 @@ build:
 	env GOOS=linux GOARCH=amd64 go build -o bin/fsa .
 	echo "uploading fsanalyze"
 	scp bin/fsa root@sac01.acceldata.dvl:/data01/acceldata/fsa
+
+build_expand:
+	echo "Building fsa-expand (linux/amd64)"
+	env GOOS=linux GOARCH=amd64 go build -o bin/fsa-expand ./cmd/expand/
+
+build_expand_local:
+	echo "Building fsa-expand (local)"
+	go build -o bin/fsa-expand ./cmd/expand/

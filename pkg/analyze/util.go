@@ -8,7 +8,7 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-func readDelimited(r io.Reader, m proto.Message) (n int, err error) {
+func readDelimited(r io.Reader, m proto.Message) (n int, pos uint64, err error) {
 	// Per AbstractParser#parsePartialDelimitedFrom with
 	// CodedInputStream#readRawVarint32.
 	var headerBuf [binary.MaxVarintLen32]byte
@@ -16,7 +16,7 @@ func readDelimited(r io.Reader, m proto.Message) (n int, err error) {
 	var messageLength uint64
 	for varIntBytes == 0 { // i.e. no varint has been decoded yet.
 		if bytesRead >= len(headerBuf) {
-			return bytesRead, errors.New("invalid varint32 encountered")
+			return bytesRead, pos, errors.New("invalid varint32 encountered")
 		}
 		// We have to read byte by byte here to avoid reading more bytes
 		// than required. Each read byte is appended to what we have
@@ -24,7 +24,7 @@ func readDelimited(r io.Reader, m proto.Message) (n int, err error) {
 		newBytesRead, err := r.Read(headerBuf[bytesRead : bytesRead+1])
 		if newBytesRead == 0 {
 			if err != nil {
-				return bytesRead, err
+				return bytesRead, pos, err
 			}
 			// A Reader should not return (0, nil), but if it does,
 			// it should be treated as no-op (according to the
@@ -41,8 +41,8 @@ func readDelimited(r io.Reader, m proto.Message) (n int, err error) {
 	newBytesRead, err := io.ReadFull(r, messageBuf)
 	bytesRead += newBytesRead
 	if err != nil {
-		return bytesRead, err
+		return bytesRead, pos, err
 	}
-
-	return bytesRead, proto.Unmarshal(messageBuf, m)
+	pos = messageLength + uint64(varIntBytes)
+	return bytesRead, pos, proto.Unmarshal(messageBuf, m)
 }

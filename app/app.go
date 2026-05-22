@@ -23,6 +23,7 @@ func init() {
 	parse = flaggy.NewSubcommand("parse")
 	parse.Description = "parses the given fsimage for analyzed output"
 	parse.String(&filePath, "f", "filepath", "filepath for the fsimage")
+	flaggy.AttachSubcommand(parse, 1)
 
 	flaggy.SetVersion(Version)
 }
